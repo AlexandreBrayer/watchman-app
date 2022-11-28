@@ -8,14 +8,23 @@
     TableHeadCell,
     Spinner,
     Button,
+    Textarea,
   } from "flowbite-svelte";
   import Pagination from "../lib/Pagination.svelte";
   import MetaTableCell from "../lib/MetaTableCell.svelte";
   import { navigate } from "svelte-routing";
 
   let page = 1;
+  let filters = "";
+  let textareaprops = { placeholder: "Filtres" };
 
   async function getProducts(goTo: number) {
+    let myFilters = {}
+    try {
+      myFilters = JSON.parse(filters);
+    } catch (e) {
+      console.log(e);
+    }
     page = goTo;
     const result = await fetch("http://localhost:3000/product/filter", {
       method: "POST",
@@ -25,7 +34,7 @@
       body: JSON.stringify({
         page: page,
         limit: 20,
-        filters: {},
+        filters: myFilters,
       }),
     });
     const data = await result.json();
@@ -37,6 +46,14 @@
 {#await promise}
   <Spinner />
 {:then products}
+  <Textarea bind:value={filters} {...textareaprops} class="max-w-xl" />
+  <Button
+    on:click={() => {
+      promise = getProducts(1);
+    }}
+    color="green"
+    pill={true}>Filtrer</Button
+  >
   <Pagination
     on:next={() => {
       promise = getProducts(page + 1);
@@ -93,4 +110,3 @@
     }}
   />
 {/await}
-

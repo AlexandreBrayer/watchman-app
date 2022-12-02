@@ -3,6 +3,7 @@
   import { Navbar, NavLi, NavUl, NavHamburger } from "flowbite-svelte";
   import Explorer from "./pages/Explorer.svelte";
   import ExplorerId from "./pages/ExplorerId.svelte";
+  import Flux from "./pages/Flux.svelte";
   export let url = "";
 </script>
 
@@ -13,6 +14,9 @@
       <NavLi active={true}>
         <Link to="/explorer">Explorer</Link>
       </NavLi>
+      <NavLi active={true}>
+        <Link to="/flux">Fluxes</Link>
+      </NavLi>
     </NavUl>
   </Navbar>
 
@@ -21,5 +25,8 @@
   </Route>
   <Route let:params path="/explorer/:id">
     <ExplorerId {params} />
+  </Route>
+  <Route path="/flux">
+    <Flux />
   </Route>
 </Router>

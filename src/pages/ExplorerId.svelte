@@ -5,9 +5,13 @@
   const id = params.id;
 
   async function getProduct(id: string) {
-    const result = await fetch(`http://localhost:3000/product/${id}`);
-    const data = await result.json();
-    return data;
+    try {
+      const result = await fetch(`http://localhost:3000/product/${id}`);
+      const data = await result.json();
+      return data;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   let promise = getProduct(id);
@@ -23,7 +27,10 @@
       <span>brand : {product.brand}</span>
       <span class="mt-4">RRP: {product.price}{product.currency}</span>
       <span>Prix réduit: {product.reducedPrice}{product.currency}</span>
-      <span class="mt-4">From process : {product.from.name}, url : {product.from.baseUrl} ({product.from._id})</span>
+      <span class="mt-4"
+        >From process : {product.from.name}, url : {product.from.baseUrl} ({product
+          .from._id})</span
+      >
     </div>
     <div class="product-img-container">
       {#each product.images as image}
@@ -31,11 +38,13 @@
       {/each}
     </div>
     <div class="mt-4">{@html product.desc}</div>
-    <ul class="ml-4 list-disc">
-      {#each Object.entries(product.meta) as [key, value]}
-        <li>{key}: {value}</li>
-      {/each}
-    </ul>
+    {#if product.meta}
+      <ul class="ml-4 list-disc">
+        {#each Object.entries(product.meta) as [key, value]}
+          <li>{key}: {value}</li>
+        {/each}
+      </ul>
+    {/if}
   </div>
 {/await}
 

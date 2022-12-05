@@ -13,10 +13,13 @@
   import Pagination from "../lib/Pagination.svelte";
   import MetaTableCell from "../lib/MetaTableCell.svelte";
   import { navigate } from "svelte-routing";
+  import { productsExplorer } from "../utils/watchmanApi";
 
   let page = 1;
   let filters = "{}";
-  let textareaprops = { placeholder: "Filtres" };
+  let textareaprops = {
+    placeholder: "Filtres",
+  };
 
   async function getProducts(goTo: number) {
     let myFilters = {};
@@ -27,19 +30,8 @@
     }
     page = goTo;
     try {
-      const result = await fetch("http://localhost:3000/product/filter", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          page: page,
-          limit: 20,
-          filters: myFilters,
-        }),
-      });
-      const data = await result.json();
-      return data;
+      const reslut = await productsExplorer(page, myFilters, 10);
+      return reslut;
     } catch (e) {
       console.log(e);
     }

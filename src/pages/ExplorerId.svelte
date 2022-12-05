@@ -1,14 +1,14 @@
 <script lang="ts">
   import { Spinner } from "flowbite-svelte";
+  import { receiveProduct } from "../utils/watchmanApi";
 
   export let params;
   const id = params.id;
 
   async function getProduct(id: string) {
     try {
-      const result = await fetch(`http://localhost:3000/product/${id}`);
-      const data = await result.json();
-      return data;
+      const result = await receiveProduct(id);
+      return result;
     } catch (e) {
       console.log(e);
     }

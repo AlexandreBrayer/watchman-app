@@ -9,13 +9,12 @@
     Spinner,
     Button,
   } from "flowbite-svelte";
-  import { executeFlux } from "../utils/watchmanApi";
+  import { executeFlux, receiveFluxes } from "../utils/watchmanApi";
 
   async function getFluxes() {
     try {
-      const result = await fetch("http://localhost:3000/flux");
-      const data = await result.json();
-      return data;
+      const result = await receiveFluxes();
+      return result;
     } catch (e) {
       console.log(e);
     }
@@ -39,7 +38,11 @@
           <TableBodyCell>{flux.name}</TableBodyCell>
           <TableBodyCell>
             <Button on:click={async () => {
-              await executeFlux({ id: flux._id });
+              try {
+                await executeFlux({ id: flux._id });
+              } catch (e) {
+                console.log(e);
+              }
             }}
             >Lancer</Button>
             <Button>Activer</Button

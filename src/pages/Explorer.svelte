@@ -7,7 +7,8 @@
   import Pagination from "../lib/Pagination.svelte";
   import { navigate } from "svelte-routing";
   import { productsExplorer } from "../utils/watchmanApi";
-  import moment from 'moment';
+    import moment from 'moment';
+    moment.locale('fr');
 
   let page = 1;
   let filters = "{}";
@@ -102,7 +103,7 @@
                 </ul>
               </td>
               <td class="cell-wrap p-2 text-gray-900">
-                {product.createdAt}
+                {moment(product.createdAt).format(('DD/MM/YYYY'))}
               </td>
               <td>
                 <Button
@@ -139,6 +140,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     max-width: 10vw;
+    text-align: center;
   }
   .li-wrap {
     overflow: hidden;

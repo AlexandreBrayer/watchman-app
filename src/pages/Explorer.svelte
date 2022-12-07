@@ -11,6 +11,7 @@
     moment.locale('fr');
 
   let page = 1;
+  let limit = 20;
   let filters = "{}";
   let textareaprops = {
     placeholder: "Filtres",
@@ -25,7 +26,7 @@
     }
     page = goTo;
     try {
-      const reslut = await productsExplorer(page, myFilters, 10);
+      const reslut = await productsExplorer(page, myFilters, limit);
       return reslut;
     } catch (e) {
       console.log(e);
@@ -72,7 +73,7 @@
         </thead>
         <tbody>
           {#each products as product}
-            <tr>
+            <tr class="table-row">
               <td class="cell-wrap p-2 text-gray-900">{product.name}</td>
               <td class="cell-wrap p-2 text-gray-900">{product.ref}</td>
               <td class="cell-wrap p-2 text-gray-900">
@@ -154,4 +155,7 @@
     width: 100px;
     margin: auto;
   }
+  .table-row:nth-child(even) {
+  background-color: #f2f2f2;
+}
 </style>

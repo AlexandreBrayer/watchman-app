@@ -1,19 +1,13 @@
 <script lang="ts">
   import {
-    Table,
-    TableBody,
-    TableBodyCell,
-    TableBodyRow,
-    TableHead,
-    TableHeadCell,
     Spinner,
     Button,
     Textarea,
   } from "flowbite-svelte";
   import Pagination from "../lib/Pagination.svelte";
-  import MetaTableCell from "../lib/MetaTableCell.svelte";
   import { navigate } from "svelte-routing";
   import { productsExplorer } from "../utils/watchmanApi";
+  import moment from 'moment';
 
   let page = 1;
   let filters = "{}";
@@ -62,31 +56,55 @@
       }}
     />
     <div class="table-container">
-      <Table striped={true}>
-        <TableHead>
-          {#each Object.entries(products[0]) as [key, _]}
-            <TableHeadCell>{key}</TableHeadCell>
-          {/each}
-        </TableHead>
-        <TableBody>
+      <table class="explorer-table">
+        <thead>
+          <th class="py-2">Nom</th>
+          <th class="py-2">Ref.</th>
+          <th class="py-2">Images</th>
+          <th class="py-2">Prix</th>
+          <th class="py-2">Prix barrés</th>
+          <th class="py-2">url</th>
+          <th class="py-2">Marque</th>
+          <th class="py-2">Meta-données</th>
+          <th class="py-2">Créé à</th>
+          <th class="py-2" />
+        </thead>
+        <tbody>
           {#each products as product}
-            <TableBodyRow>
-              {#each Object.entries(product) as [key, value]}
-                {#if key === "images"}
-                  <TableBodyCell>
-                    <img src={value[0]} style="width: 100px;" alt="N/A" />
-                  </TableBodyCell>
-                {:else if key === "url" && typeof value === "string"}
-                  <TableBodyCell>
-                    <a rel="noreferrer" href={value} target="_blank">Link</a>
-                  </TableBodyCell>
-                {:else if key === "meta" && typeof value === "object"}
-                  <MetaTableCell meta={value} />
-                {:else}
-                  <TableBodyCell>{@html value}</TableBodyCell>
-                {/if}
-              {/each}
-              <TableBodyCell>
+            <tr>
+              <td class="cell-wrap p-2 text-gray-900">{product.name}</td>
+              <td class="cell-wrap p-2 text-gray-900">{product.ref}</td>
+              <td class="cell-wrap p-2 text-gray-900">
+                <img src={product.images[0]} class="img-centered" alt="N/A" />
+              </td>
+              <td class="cell-wrap p-2 text-gray-900">
+                {product.price}
+                {product.currency}
+              </td>
+              <td class="cell-wrap p-2 text-gray-900"
+                >{product.reducedPrice} {product.currency}
+              </td>
+              <td class="cell-wrap p-2 text-gray-900">
+                <a rel="noreferrer" href={product.url} target="_blank">Link</a>
+              </td>
+              <td class="cell-wrap p-2 text-gray-900"
+                >{product.brand}
+              </td>
+              <td class="cell-wrap p-2 text-gray-900">
+                <ul>
+                  {#each Object.entries(product.meta) as [key, value]}
+                    <li
+                      class="li-wrap whitespace-nowrap font-medium p-4 text-gray-900"
+                    >
+                      <span>{key}: {value}</span>
+                    </li>
+                  {/each}
+                </ul>
+              </td>
+              <td class="cell-wrap p-2 text-gray-900">
+                {product.createdAt}
+              </td>
+              <td>
                 <Button
                   color="green"
                   on:click={() => {
@@ -94,11 +112,11 @@
                   }}
                   pill={true}>View</Button
                 >
-              </TableBodyCell>
-            </TableBodyRow>
+              </td>
+            </tr>
           {/each}
-        </TableBody>
-      </Table>
+        </tbody>
+      </table>
     </div>
     <Pagination
       on:next={() => {
@@ -115,5 +133,23 @@
   .table-container {
     overflow: auto;
     max-width: 100vw;
+  }
+  .cell-wrap {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 10vw;
+  }
+  .li-wrap {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .explorer-table {
+    width: 100%;
+  }
+  .img-centered {
+    width: 100px;
+    margin: auto;
   }
 </style>

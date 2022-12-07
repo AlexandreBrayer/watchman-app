@@ -26,8 +26,8 @@
     }
     page = goTo;
     try {
-      const reslut = await productsExplorer(page, myFilters, limit);
-      return reslut;
+      const result = await productsExplorer(page, myFilters, limit);
+      return result;
     } catch (e) {
       console.log(e);
     }
@@ -94,6 +94,7 @@
               </td>
               <td class="cell-wrap p-2 text-gray-900">
                 <ul>
+                  {#if product.meta}
                   {#each Object.entries(product.meta) as [key, value]}
                     <li
                       class="li-wrap whitespace-nowrap font-medium p-4 text-gray-900"
@@ -101,6 +102,7 @@
                       <span>{key}: {value}</span>
                     </li>
                   {/each}
+                  {/if}
                 </ul>
               </td>
               <td class="cell-wrap p-2 text-gray-900">

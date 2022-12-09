@@ -1,2 +1,38 @@
 /// <reference types="svelte" />
 /// <reference types="vite/client" />
+
+type Filters = {
+  filters: {
+    name: {
+      value: string;
+      strict: boolean;
+    };
+    ref: {
+      value: string;
+      strict: boolean;
+    };
+    brand: {
+      value: string;
+      strict: boolean;
+    };
+    url: {
+      value: string;
+      strict: boolean;
+    };
+  };
+};
+
+type Product = {
+  _id: string;
+  name: string;
+  ref: string;
+  brand: string;
+  url: string;
+  price: number;
+  currency: string;
+  images: [string];
+  reducedPrice: number;
+  updatedAt: string;
+  createdAt: string;
+  meta: any;
+};

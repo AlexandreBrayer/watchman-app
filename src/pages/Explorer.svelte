@@ -5,32 +5,48 @@
   import { productsExplorer } from "../utils/watchmanApi";
   import moment from "moment";
   import Filters from "../lib/Filters.svelte";
-  import Icon from '@iconify/svelte';
+  import Icon from "@iconify/svelte";
   moment.locale("fr");
 
   let page = 1;
   let limit = 20;
   let descending = true;
-  let filtersBind: any
+  let filtersBind: any;
 
-  async function filter(e): Promise<void> {
-    const filters: Filters = e.detail.filters;
+  function generateFilters(filters: Filters): Object {
     const newFilters = Object.keys(filters).reduce((acc, key) => {
       if (filters[key].value !== "") {
         acc[key] = filters[key];
       }
       return acc;
     }, {});
+    return newFilters;
+  }
+
+  async function filter(e): Promise<void> {
+    page = 1;
+    const filters: Filters = e.detail.filters;
+    const newFilters = generateFilters(filters);
     const sortBy = {
       createdAt: descending ? "-1" : "1",
-    }
-    promise = productsExplorer(page, {filters : newFilters, sortBy : sortBy}, limit);
+    };
+    promise = productsExplorer(
+      page,
+      { filters: newFilters, sortBy: sortBy },
+      limit
+    );
   }
 
   async function getProducts(
     goTo: number,
-    filters: Object =  {sortBy : {createdAt : descending ? "-1" : "1"}}
+    filters: Object = {
+      filters: generateFilters(filtersBind?.filters || {}),
+      sortBy: { createdAt: descending ? "-1" : "1" },
+    }
   ): Promise<[Product]> {
+    if (goTo < 1) {
+      return;
+    }
     page = goTo;
     try {
       const result: [Product] = await productsExplorer(page, filters, limit);
@@ -68,10 +84,20 @@
           <th class="py-2">url</th>
           <th class="py-2">Marque</th>
           <th class="py-2">Meta-données</th>
-          <th class="py-2"><span on:keydown on:click={() => {
-            descending = !descending;
-            promise = getProducts(page);
-          }} class="flex text items-center">Créé le <Icon class="pt-1" icon={descending ? "il:arrow-down" : "il:arrow-up"} /></span></th>
+          <th class="py-2"
+            ><span
+              on:keydown
+              on:click={() => {
+                descending = !descending;
+                promise = getProducts(page);
+              }}
+              class="flex text items-center"
+              >Créé le <Icon
+                class="pt-1"
+                icon={descending ? "il:arrow-down" : "il:arrow-up"}
+              /></span
+            ></th
+          >
           <th class="py-2" />
         </thead>
         <tbody>

@@ -23,9 +23,9 @@
     return newFilters;
   }
 
-  async function filter(e): Promise<void> {
+  async function filter(e: { detail: { filters: Filters; }; }): Promise<void> {
     page = 1;
-    const filters: Filters = e.detail.filters;
+    const filters = e.detail.filters;
     const newFilters = generateFilters(filters);
     const sortBy = {
       createdAt: descending ? "-1" : "1",
@@ -73,7 +73,7 @@
         promise = getProducts(page - 1);
       }}
     />
-    <div class="table-container">
+    <div class="table-container px-2">
       <table class="explorer-table">
         <thead>
           <th class="py-2">Nom</th>
@@ -103,8 +103,9 @@
         <tbody>
           {#each products as product}
             <tr class="table-row">
-              <td class="cell-wrap p-2 text-gray-900">{product.name}</td>
-              <td class="cell-wrap p-2 text-gray-900">{product.ref}</td>
+              <td class="cell-wrap p-2 text-gray-900"><abbr class="custom-abbr" title= {product.name}>{product.name}</abbr></td>
+              <td class="cell-wrap p-2 text-gray-900"><abbr class="custom-abbr" title= {product.ref}>{product.ref}</abbr> 
+              </td>
               <td class="cell-wrap p-2 text-gray-900">
                 <img src={product.images[0]} class="img-centered" alt="N/A" />
               </td>
@@ -170,7 +171,6 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     max-width: 10vw;
-    text-align: center;
   }
   .li-wrap {
     overflow: hidden;
@@ -179,12 +179,25 @@
   }
   .explorer-table {
     width: 100%;
+    text-align: left;
   }
   .img-centered {
     width: 100px;
-    margin: auto;
   }
   .table-row:nth-child(even) {
     background-color: #f2f2f2;
   }
+  .custom-abbr {
+    text-decoration: none;
+    cursor: help;
+  }
+  .custom-abbr:hover:before {
+   content: attr(title);
+   position:absolute;
+    background:#000;
+    color:#fff;
+    padding:5px 10px;
+    margin:-35px 0 0 0;
+}
+
 </style>

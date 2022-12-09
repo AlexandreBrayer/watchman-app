@@ -25,7 +25,7 @@
     },
   };
 
-  let enabled = true;
+  let enabled = false;
 </script>
 
 <div class="w-full mb-1 flex justify-center">

@@ -1,54 +1,54 @@
 <script lang="ts">
-  import {
-    Spinner,
-    Button,
-    Textarea,
-  } from "flowbite-svelte";
+  import { Spinner, Button } from "flowbite-svelte";
   import Pagination from "../lib/Pagination.svelte";
   import { navigate } from "svelte-routing";
   import { productsExplorer } from "../utils/watchmanApi";
-    import moment from 'moment';
-    moment.locale('fr');
+  import moment from "moment";
+  import Filters from "../lib/Filters.svelte";
+  import Icon from '@iconify/svelte';
+  moment.locale("fr");
 
   let page = 1;
   let limit = 20;
-  let filters = "{}";
-  let textareaprops = {
-    placeholder: "Filtres",
-  };
+  let descending = true;
+  let filtersBind: any
 
-  async function getProducts(goTo: number) {
-    let myFilters = {};
-    try {
-      myFilters = JSON.parse(filters);
-    } catch (e) {
-      console.log(e);
+  async function filter(e): Promise<void> {
+    const filters: Filters = e.detail.filters;
+    const newFilters = Object.keys(filters).reduce((acc, key) => {
+      if (filters[key].value !== "") {
+        acc[key] = filters[key];
+      }
+      return acc;
+    }, {});
+    const sortBy = {
+      createdAt: descending ? "-1" : "1",
     }
+    promise = productsExplorer(page, {filters : newFilters, sortBy : sortBy}, limit);
+  }
+
+  async function getProducts(
+    goTo: number,
+    filters: Object =  {sortBy : {createdAt : descending ? "-1" : "1"}}
+  ): Promise<[Product]> {
     page = goTo;
     try {
-      const result = await productsExplorer(page, myFilters, limit);
+      const result: [Product] = await productsExplorer(page, filters, limit);
       return result;
     } catch (e) {
       console.log(e);
     }
   }
-  let promise = getProducts(1);
+  let promise: Promise<[Product]> = getProducts(1);
 </script>
 
+<Filters bind:filters={filtersBind} on:filter={filter} />
 {#await promise}
   <Spinner />
 {:then products}
   {#if products.length < 1}
     <div class="m-6">Aucun produit</div>
   {:else}
-    <Textarea bind:value={filters} {...textareaprops} class="max-w-xl" />
-    <Button
-      on:click={() => {
-        promise = getProducts(1);
-      }}
-      color="green"
-      pill={true}>Filtrer</Button
-    >
     <Pagination
       on:next={() => {
         promise = getProducts(page + 1);
@@ -68,7 +68,10 @@
           <th class="py-2">url</th>
           <th class="py-2">Marque</th>
           <th class="py-2">Meta-données</th>
-          <th class="py-2">Créé à</th>
+          <th class="py-2"><span on:keydown on:click={() => {
+            descending = !descending;
+            promise = getProducts(page);
+          }} class="flex text items-center">Créé le <Icon class="pt-1" icon={descending ? "il:arrow-down" : "il:arrow-up"} /></span></th>
           <th class="py-2" />
         </thead>
         <tbody>
@@ -89,24 +92,22 @@
               <td class="cell-wrap p-2 text-gray-900">
                 <a rel="noreferrer" href={product.url} target="_blank">Link</a>
               </td>
-              <td class="cell-wrap p-2 text-gray-900"
-                >{product.brand}
-              </td>
+              <td class="cell-wrap p-2 text-gray-900">{product.brand} </td>
               <td class="cell-wrap p-2 text-gray-900">
                 <ul>
                   {#if product.meta}
-                  {#each Object.entries(product.meta) as [key, value]}
-                    <li
-                      class="li-wrap whitespace-nowrap font-medium p-4 text-gray-900"
-                    >
-                      <span>{key}: {value}</span>
-                    </li>
-                  {/each}
+                    {#each Object.entries(product.meta) as [key, value]}
+                      <li
+                        class="li-wrap whitespace-nowrap font-medium p-4 text-gray-900"
+                      >
+                        <span>{key}: {value}</span>
+                      </li>
+                    {/each}
                   {/if}
                 </ul>
               </td>
               <td class="cell-wrap p-2 text-gray-900">
-                {moment(product.createdAt).format(('DD/MM/YYYY'))}
+                {moment(product.createdAt).format("DD/MM/YYYY")}
               </td>
               <td>
                 <Button
@@ -158,6 +159,6 @@
     margin: auto;
   }
   .table-row:nth-child(even) {
-  background-color: #f2f2f2;
-}
+    background-color: #f2f2f2;
+  }
 </style>

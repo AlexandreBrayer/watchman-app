@@ -1,64 +1,35 @@
 <script lang="ts">
   import { Spinner, Button } from "flowbite-svelte";
-  import Pagination from "../lib/Pagination.svelte";
   import { navigate } from "svelte-routing";
   import { productsExplorer } from "../utils/watchmanApi";
   import moment from "moment";
-  import Filters from "../lib/Filters.svelte";
   import Icon from "@iconify/svelte";
+  import { explorerParams } from "../stores/stores";
+  import Filters from "../lib/Filters.svelte";
+  import Pagination from "../lib/Pagination.svelte";
   moment.locale("fr");
 
-  let page = 1;
-  let limit = 20;
-  let descending = true;
-  let filtersBind: any;
-
-  function generateFilters(filters: Filters): Object {
-    const newFilters = Object.keys(filters).reduce((acc, key) => {
-      if (filters[key].value !== "") {
-        acc[key] = filters[key];
-      }
-      return acc;
-    }, {});
-    return newFilters;
-  }
-
-  async function filter(e: { detail: { filters: Filters; }; }): Promise<void> {
-    page = 1;
-    const filters = e.detail.filters;
-    const newFilters = generateFilters(filters);
-    const sortBy = {
-      createdAt: descending ? "-1" : "1",
-    };
-    promise = productsExplorer(
-      page,
-      { filters: newFilters, sortBy: sortBy },
-      limit
-    );
-  }
-
-  async function getProducts(
-    goTo: number,
-    filters: Object = {
-      filters: generateFilters(filtersBind?.filters || {}),
-      sortBy: { createdAt: descending ? "-1" : "1" },
+  async function getProducts(): Promise<[Product]> {
+    console.log($explorerParams.page);
+    if ($explorerParams.page < 1) {
+      $explorerParams.page = 1;
+      return promise;
     }
-  ): Promise<[Product]> {
-    if (goTo < 1) {
-      return;
-    }
-    page = goTo;
     try {
-      const result: [Product] = await productsExplorer(page, filters, limit);
+      const result: [Product] = await productsExplorer($explorerParams);
       return result;
     } catch (e) {
       console.log(e);
     }
   }
-  let promise: Promise<[Product]> = getProducts(1);
+  let promise: Promise<[Product]> = getProducts();
 </script>
 
-<Filters bind:filters={filtersBind} on:filter={filter} />
+<Filters
+  on:filter={() => {
+    promise = getProducts();
+  }}
+/>
 {#await promise}
   <Spinner />
 {:then products}
@@ -67,10 +38,12 @@
   {:else}
     <Pagination
       on:next={() => {
-        promise = getProducts(page + 1);
+        $explorerParams.page += 1;
+        promise = getProducts();
       }}
       on:previous={() => {
-        promise = getProducts(page - 1);
+        $explorerParams.page -= 1;
+        promise = getProducts();
       }}
     />
     <div class="table-container px-2">
@@ -88,13 +61,17 @@
             ><span
               on:keydown
               on:click={() => {
-                descending = !descending;
-                promise = getProducts(page);
+                $explorerParams.sortBy.createdAt === "1"
+                  ? ($explorerParams.sortBy.createdAt = "-1")
+                  : ($explorerParams.sortBy.createdAt = "1");
+                promise = getProducts();
               }}
               class="flex text items-center"
               >Créé le <Icon
                 class="pt-1"
-                icon={descending ? "il:arrow-down" : "il:arrow-up"}
+                icon={$explorerParams.sortBy.createdAt === "-1"
+                  ? "il:arrow-down"
+                  : "il:arrow-up"}
               /></span
             ></th
           >
@@ -103,8 +80,15 @@
         <tbody>
           {#each products as product}
             <tr class="table-row">
-              <td class="cell-wrap p-2 text-gray-900"><abbr class="custom-abbr" title= {product.name}>{product.name}</abbr></td>
-              <td class="cell-wrap p-2 text-gray-900"><abbr class="custom-abbr" title= {product.ref}>{product.ref}</abbr> 
+              <td class="cell-wrap p-2 text-gray-900"
+                ><abbr class="custom-abbr" title={product.name}
+                  >{product.name}</abbr
+                ></td
+              >
+              <td class="cell-wrap p-2 text-gray-900"
+                ><abbr class="custom-abbr" title={product.ref}
+                  >{product.ref}</abbr
+                >
               </td>
               <td class="cell-wrap p-2 text-gray-900">
                 <img src={product.images[0]} class="img-centered" alt="N/A" />
@@ -152,10 +136,12 @@
     </div>
     <Pagination
       on:next={() => {
-        promise = getProducts(page + 1);
+        $explorerParams.page += 1;
+        promise = getProducts();
       }}
       on:previous={() => {
-        promise = getProducts(page - 1);
+        $explorerParams.page -= 1;
+        promise = getProducts();
       }}
     />
   {/if}
@@ -192,12 +178,11 @@
     cursor: help;
   }
   .custom-abbr:hover:before {
-   content: attr(title);
-   position:absolute;
-    background:#000;
-    color:#fff;
-    padding:5px 10px;
-    margin:-35px 0 0 0;
-}
-
+    content: attr(title);
+    position: absolute;
+    background: #000;
+    color: #fff;
+    padding: 5px 10px;
+    margin: -35px 0 0 0;
+  }
 </style>

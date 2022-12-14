@@ -2,6 +2,7 @@
   import { Button, Toggle } from "flowbite-svelte";
   import { createEventDispatcher } from "svelte";
   import { explorerParams } from "../stores/stores";
+  import ResetFilters from "./ResetFilters.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -77,6 +78,7 @@
           </div>          
           <Toggle bind:checked={$explorerParams.dateBarrier.after}>{$explorerParams.dateBarrier.after ? "Apres" : "Avant"}</Toggle>
         {/if}
+        <ResetFilters />
       </div>
     </div>
     <Button on:click={() => dispatch("filter")}>Filtrer</Button>

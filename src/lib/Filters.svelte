@@ -3,6 +3,7 @@
   import { createEventDispatcher } from "svelte";
   import { explorerParams } from "../stores/stores";
   import ResetFilters from "./ResetFilters.svelte";
+  import Icon from "@iconify/svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -11,17 +12,23 @@
 
 <div class="w-full mb-1 flex justify-center">
   <Button
+    color="purple"
     on:click={() => {
       enabled = !enabled;
-    }}>Filtres</Button
-  >
+    }}
+    >Filtres <Icon class="ml-1" icon={"mdi:filter"} />
+  </Button>
 </div>
 {#if enabled}
   <div class="w-3/5 flex-wrap flex m-auto justify-center">
     <div class="w-1/2">
       <div class=" w-full flex justify-start items-center">
         <span class="text-center mr-2">Nom</span>
-        <input class="" type="text" bind:value={$explorerParams.filters.name.value} />
+        <input
+          class=""
+          type="text"
+          bind:value={$explorerParams.filters.name.value}
+        />
         <span class="mx-2">Strict</span>
         <input
           class="z-10"
@@ -31,7 +38,11 @@
       </div>
       <div class="py-1 w-full flex justify-start items-center">
         <span class="text-center mr-2">Ref.</span>
-        <input class="" type="text" bind:value={$explorerParams.filters.ref.value} />
+        <input
+          class=""
+          type="text"
+          bind:value={$explorerParams.filters.ref.value}
+        />
         <span class="mx-2">Strict</span>
         <input
           class="z-10"
@@ -41,7 +52,11 @@
       </div>
       <div class="py-1 w-full flex justify-start items-center">
         <span class="text-center mr-2">Marque</span>
-        <input class="" type="text" bind:value={$explorerParams.filters.brand.value} />
+        <input
+          class=""
+          type="text"
+          bind:value={$explorerParams.filters.brand.value}
+        />
         <span class="mx-2">Strict</span>
         <input
           class="z-10"
@@ -51,7 +66,11 @@
       </div>
       <div class="py-1 w-full flex justify-start items-center">
         <span class="text-center mr-2">Url</span>
-        <input class="" type="text" bind:value={$explorerParams.filters.url.value} />
+        <input
+          class=""
+          type="text"
+          bind:value={$explorerParams.filters.url.value}
+        />
         <span class="mx-2">Strict</span>
         <input
           class="z-10"
@@ -63,7 +82,11 @@
     <div class="w-1/2">
       <div class=" w-full flex flex-col justify-end items-end">
         <div>
-          <input bind:checked={$explorerParams.dateBarrier.use} id="useDateBarrier" type="checkbox">
+          <input
+            bind:checked={$explorerParams.dateBarrier.use}
+            id="useDateBarrier"
+            type="checkbox"
+          />
           <label for="useDateBarrier">Utiliser une date limite</label>
         </div>
         {#if $explorerParams.dateBarrier.use}
@@ -75,12 +98,16 @@
                 bind:value={$explorerParams.dateBarrier.value}
               />
             </div>
-          </div>          
-          <Toggle bind:checked={$explorerParams.dateBarrier.after}>{$explorerParams.dateBarrier.after ? "Apres" : "Avant"}</Toggle>
+          </div>
+          <Toggle bind:checked={$explorerParams.dateBarrier.after}>
+            {$explorerParams.dateBarrier.after ? "Apres" : "Avant"}
+          </Toggle>
         {/if}
         <ResetFilters />
       </div>
     </div>
-    <Button on:click={() => dispatch("filter")}>Filtrer</Button>
+    <Button color="purple" on:click={() => dispatch("filter")}>
+      Rechercher <Icon class="ml-1" icon={"mdi:magnify"} />
+    </Button>
   </div>
 {/if}

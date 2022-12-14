@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Button } from "flowbite-svelte";
   import { explorerParams } from "../stores/stores";
+  import Icon from "@iconify/svelte";
   function ResetFilters() {
     $explorerParams = {
       filters: {
@@ -36,5 +37,5 @@
 </script>
 
 <Button class="my-2" color="red" on:click={ResetFilters}>
-  Réinitialiser les filtres
+  Réinitialiser les filtres <Icon class="ml-1" icon={"mdi:filter-remove"} />
 </Button>

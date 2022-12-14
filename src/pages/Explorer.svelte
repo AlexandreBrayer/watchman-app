@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Spinner, Button} from "flowbite-svelte";
+  import { Spinner, Button } from "flowbite-svelte";
   import { navigate } from "svelte-routing";
   import { productsExplorer } from "../utils/watchmanApi";
   import moment from "moment";
@@ -61,8 +61,8 @@
           <th class="py-2">url</th>
           <th class="py-2">Marque</th>
           <th class="py-2">Meta-données</th>
-          <th class="py-2"
-            ><span
+          <th class="py-2">
+            <span
               on:keydown
               on:click={() => {
                 $explorerParams.sortBy.createdAt === "1"
@@ -71,28 +71,30 @@
                 promise = getProducts();
               }}
               class="flex text items-center"
-              >Créé le <Icon
+            >
+              Créé le
+              <Icon
                 class="pt-1"
                 icon={$explorerParams.sortBy.createdAt === "-1"
                   ? "il:arrow-down"
                   : "il:arrow-up"}
-              /></span
-            ></th
-          >
+              />
+            </span>
+          </th>
           <th class="py-2" />
         </thead>
         <tbody>
           {#each products as product}
             <tr class="table-row">
-              <td class="cell-wrap p-2 text-gray-900"
-                ><abbr class="custom-abbr" title={product.name}
-                  >{product.name}</abbr
-                ></td
+              <td class="cell-wrap p-2 text-gray-900">
+                <abbr class="custom-abbr" title={product.name}>
+                  {product.name}
+                </abbr></td
               >
-              <td class="cell-wrap p-2 text-gray-900"
-                ><abbr class="custom-abbr" title={product.ref}
-                  >{product.ref}</abbr
-                >
+              <td class="cell-wrap p-2 text-gray-900">
+                <abbr class="custom-abbr" title={product.ref}>
+                  {product.ref}
+                </abbr>
               </td>
               <td class="cell-wrap p-2 text-gray-900">
                 <img src={product.images[0]} class="img-centered" alt="N/A" />
@@ -115,7 +117,11 @@
                       <li
                         class="li-wrap whitespace-nowrap font-medium p-4 text-gray-900"
                       >
-                        <span>{key}: {value}</span>
+                        <span>
+                          <abbr class="custom-abbr" title={key + " : " + value}>
+                            {key}: {value}
+                          </abbr>
+                        </span>
                       </li>
                     {/each}
                   {/if}

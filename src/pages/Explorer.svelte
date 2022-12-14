@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Spinner, Button } from "flowbite-svelte";
+  import { Spinner, Button} from "flowbite-svelte";
   import { navigate } from "svelte-routing";
   import { productsExplorer } from "../utils/watchmanApi";
   import moment from "moment";
@@ -7,10 +7,10 @@
   import { explorerParams } from "../stores/stores";
   import Filters from "../lib/Filters.svelte";
   import Pagination from "../lib/Pagination.svelte";
+  import ExportModal from "../lib/ExportModal.svelte";
   moment.locale("fr");
 
   async function getProducts(): Promise<[Product]> {
-    console.log($explorerParams.page);
     if ($explorerParams.page < 1) {
       $explorerParams.page = 1;
       return promise;
@@ -22,6 +22,17 @@
       console.log(e);
     }
   }
+
+  function nextPage() {
+    $explorerParams.page += 1;
+    promise = getProducts();
+  }
+
+  function previousPage() {
+    $explorerParams.page -= 1;
+    promise = getProducts();
+  }
+
   let promise: Promise<[Product]> = getProducts();
 </script>
 
@@ -30,22 +41,15 @@
     promise = getProducts();
   }}
 />
+<ExportModal />
 {#await promise}
   <Spinner />
 {:then products}
   {#if products.length < 1}
     <div class="m-6">Aucun produit</div>
+    <Pagination on:next={nextPage} on:previous={previousPage} />
   {:else}
-    <Pagination
-      on:next={() => {
-        $explorerParams.page += 1;
-        promise = getProducts();
-      }}
-      on:previous={() => {
-        $explorerParams.page -= 1;
-        promise = getProducts();
-      }}
-    />
+    <Pagination on:next={nextPage} on:previous={previousPage} />
     <div class="table-container px-2">
       <table class="explorer-table">
         <thead>
@@ -134,16 +138,7 @@
         </tbody>
       </table>
     </div>
-    <Pagination
-      on:next={() => {
-        $explorerParams.page += 1;
-        promise = getProducts();
-      }}
-      on:previous={() => {
-        $explorerParams.page -= 1;
-        promise = getProducts();
-      }}
-    />
+    <Pagination on:next={nextPage} on:previous={previousPage} />
   {/if}
 {/await}
 

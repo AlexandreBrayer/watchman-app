@@ -79,6 +79,6 @@
         {/if}
       </div>
     </div>
-    <Button on:click={() => dispatch("filter", $explorerParams)}>Filtrer</Button>
+    <Button on:click={() => dispatch("filter")}>Filtrer</Button>
   </div>
 {/if}

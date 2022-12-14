@@ -2,23 +2,21 @@
 /// <reference types="vite/client" />
 
 type Filters = {
-  filters: {
-    name: {
-      value: string;
-      strict: boolean;
-    };
-    ref: {
-      value: string;
-      strict: boolean;
-    };
-    brand: {
-      value: string;
-      strict: boolean;
-    };
-    url: {
-      value: string;
-      strict: boolean;
-    };
+  name: {
+    value: string;
+    strict: boolean;
+  };
+  ref: {
+    value: string;
+    strict: boolean;
+  };
+  brand: {
+    value: string;
+    strict: boolean;
+  };
+  url: {
+    value: string;
+    strict: boolean;
   };
 };
 
@@ -35,4 +33,18 @@ type Product = {
   updatedAt: string;
   createdAt: string;
   meta: any;
+};
+
+type ExplorerParams = {
+  sortBy: {
+    createdAt: "-1" | "1";
+  };
+  dateBarrier: {
+    use: boolean;
+    value: string;
+    after: boolean;
+  };
+  page: number;
+  limit: number;
+  filters: Filters;
 };

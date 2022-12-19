@@ -43,7 +43,9 @@
 />
 <ExportModal />
 {#await promise}
-  <Spinner />
+  <div class="flex justify-center">
+    <Spinner class="content-center" />
+  </div>
 {:then products}
   {#if products.length < 1}
     <div class="m-6">Aucun produit</div>

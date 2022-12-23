@@ -2,6 +2,27 @@ type fluxExecutionBody = {
   id: string;
 };
 
+function sanitizeParams(params: Object) {
+  console.log(params)
+  const paramsCopy = JSON.parse(JSON.stringify(params));
+  for (const filter in paramsCopy.filters) {
+    if (paramsCopy.filters[filter].value === "") {
+      delete paramsCopy.filters[filter];
+    } else {
+      paramsCopy.filters[filter].value = paramsCopy.filters[filter].value
+        .split("\n")
+        .filter((value) => value !== "");
+      if (paramsCopy.filters[filter].value.length === 0) {
+        delete paramsCopy.filters[filter];
+      }
+    }
+  }
+  if (paramsCopy.dateBarrier?.use === false) {
+    delete paramsCopy.dateBarrier;
+  }
+  return paramsCopy;
+}
+
 export async function executeFlux(fluxExecutionBody: fluxExecutionBody) {
   const apiUrl = import.meta.env.VITE_API_URL;
   const response = await fetch(`${apiUrl}/fluxexecution`, {
@@ -16,12 +37,7 @@ export async function executeFlux(fluxExecutionBody: fluxExecutionBody) {
 
 export async function productsExplorer(params: Object = {}) {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const paramsCopy = JSON.parse(JSON.stringify(params));
-  for (const filter in paramsCopy.filters) {
-    if (paramsCopy.filters[filter].value === "") {
-      delete paramsCopy.filters[filter];
-    }
-  }
+  const paramsCopy = sanitizeParams(params);
   const result = await fetch(`${apiUrl}/product/filter`, {
     method: "POST",
     headers: {
@@ -58,33 +74,28 @@ export async function receiveFluxes() {
 }
 
 export async function generateCsv(fields: String[], filters: any) {
-    const apiUrl = import.meta.env.VITE_API_URL;
-    const result = await fetch(`${apiUrl}/export`, {
-        method: "POST",
-        headers: {
-        "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ fields, filters }),
-    });
-    const data = await result.text();
-    return data;
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const result = await fetch(`${apiUrl}/export`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ fields, filters }),
+  });
+  const data = await result.text();
+  return data;
 }
 
-export async function countProducts(params : Object) {
-    const apiUrl = import.meta.env.VITE_API_URL;
-    const paramsCopy = JSON.parse(JSON.stringify(params));
-    for (const filter in paramsCopy.filters) {
-        if (paramsCopy.filters[filter].value === "") {
-        delete paramsCopy.filters[filter];
-        }
-    }
-    const result = await fetch(`${apiUrl}/product/count`, {
-        method: "POST",
-        headers: {
-        "Content-Type": "application/json",
-        },
-        body: JSON.stringify(paramsCopy),
-    });
-    const data = await result.json();
-    return data;
+export async function countProducts(params: Object = {}) {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const paramsCopy = sanitizeParams(params);
+  const result = await fetch(`${apiUrl}/product/count`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(paramsCopy),
+  });
+  const data = await result.json();
+  return data;
 }

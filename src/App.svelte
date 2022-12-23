@@ -4,6 +4,7 @@
   import Explorer from "./pages/Explorer.svelte";
   import ExplorerId from "./pages/ExplorerId.svelte";
   import Flux from "./pages/Flux.svelte";
+  import Reports from "./pages/Reports.svelte";
   import Home from "./pages/Home.svelte";
   export let url = "";
 </script>
@@ -21,6 +22,9 @@
       <NavLi active={true}>
         <Link to="/flux">Fluxes</Link>
       </NavLi>
+      <NavLi active={true}>
+        <Link to="/reports">Reports</Link>
+      </NavLi>
     </NavUl>
   </Navbar>
 
@@ -35,5 +39,8 @@
   </Route>
   <Route path="/flux">
     <Flux />
+  </Route>
+  <Route path="/reports">
+    <Reports />
   </Route>
 </Router>

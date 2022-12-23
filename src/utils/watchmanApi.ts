@@ -99,3 +99,28 @@ export async function countProducts(params: Object = {}) {
   const data = await result.json();
   return data;
 }
+
+export async function receiveLastReportByFluxId(fluxId : string) {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const result = await fetch(`${apiUrl}/report/lastfluxreport/${fluxId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const data = await result.json();
+  return data;
+} 
+
+export async function receiveReports(page : number, limit : number) {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const result = await fetch(`${apiUrl}/report?page=${page}&limit=${limit}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const data = await result.json();
+  console.log(data)
+  return data;
+}

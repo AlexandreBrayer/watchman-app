@@ -10,7 +10,7 @@
     Button,
   } from "flowbite-svelte";
   import { executeFlux, receiveFluxes } from "../utils/watchmanApi";
-
+  import InfoModal from "../lib/InfoModal.svelte";
   async function getFluxes() {
     try {
       const result = await receiveFluxes();
@@ -37,16 +37,19 @@
           <TableBodyCell>{flux._id}</TableBodyCell>
           <TableBodyCell>{flux.name}</TableBodyCell>
           <TableBodyCell>
-            <Button on:click={async () => {
-              try {
-                await executeFlux({ id: flux._id });
-              } catch (e) {
-                console.log(e);
-              }
-            }}
-            >Lancer</Button>
-            <Button>Activer</Button
+            <Button
+              on:click={async () => {
+                try {
+                  await executeFlux({ id: flux._id });
+                } catch (e) {
+                  console.log(e);
+                }
+              }}
             >
+              Lancer
+            </Button>
+            <Button disabled>Activer</Button>
+            <InfoModal fluxId={flux._id} />
           </TableBodyCell>
         </TableBodyRow>
       {/each}

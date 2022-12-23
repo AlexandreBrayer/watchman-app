@@ -18,7 +18,7 @@
     "createdAt",
   ];
   let selectedFields: String[] = ["name"];
-  let count: Promise<any> = countProducts($explorerParams.filters);
+  let count: Promise<any> = countProducts($explorerParams);
   async function downloadCsv() {
     const data = await generateCsv(selectedFields, $explorerParams.filters);
     const encodedData = encodeURIComponent(data);

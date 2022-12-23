@@ -1,7 +1,11 @@
 <script lang="ts">
   import { Button } from "flowbite-svelte";
   import { explorerParams } from "../stores/stores";
+  import { createEventDispatcher } from "svelte";
   import Icon from "@iconify/svelte";
+
+  const dispatch = createEventDispatcher();
+
   function ResetFilters() {
     $explorerParams = {
       filters: {
@@ -33,6 +37,7 @@
       page: 1,
       limit: 20,
     };
+    dispatch("filter");
   }
 </script>
 

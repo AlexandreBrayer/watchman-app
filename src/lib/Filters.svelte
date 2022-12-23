@@ -20,11 +20,11 @@
   </Button>
 </div>
 {#if enabled}
-  <div class="w-3/5 flex-wrap flex m-auto justify-center">
+  <div class="w-4/5 flex-wrap flex m-auto justify-center">
     <div class="w-1/2">
       <div class=" w-full flex justify-start items-center">
         <span class="text-center mr-2">Nom</span>
-        <input
+        <textarea
           class=""
           type="text"
           bind:value={$explorerParams.filters.name.value}
@@ -38,7 +38,7 @@
       </div>
       <div class="py-1 w-full flex justify-start items-center">
         <span class="text-center mr-2">Ref.</span>
-        <input
+        <textarea
           class=""
           type="text"
           bind:value={$explorerParams.filters.ref.value}
@@ -52,7 +52,7 @@
       </div>
       <div class="py-1 w-full flex justify-start items-center">
         <span class="text-center mr-2">Marque</span>
-        <input
+        <textarea
           class=""
           type="text"
           bind:value={$explorerParams.filters.brand.value}
@@ -66,7 +66,7 @@
       </div>
       <div class="py-1 w-full flex justify-start items-center">
         <span class="text-center mr-2">Url</span>
-        <input
+        <textarea
           class=""
           type="text"
           bind:value={$explorerParams.filters.url.value}
@@ -103,7 +103,7 @@
             {$explorerParams.dateBarrier.after ? "Apres" : "Avant"}
           </Toggle>
         {/if}
-        <ResetFilters />
+        <ResetFilters on:filter/>
       </div>
     </div>
     <Button color="purple" on:click={() => dispatch("filter")}>

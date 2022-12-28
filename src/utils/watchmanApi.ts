@@ -16,9 +16,22 @@ function sanitizeParams(params: Object) {
       }
     }
   }
+  for (const filter in paramsCopy.excFilters) {
+    if (paramsCopy.excFilters[filter].value === "") {
+      delete paramsCopy.excFilters[filter];
+    } else {
+      paramsCopy.excFilters[filter].value = paramsCopy.excFilters[filter].value
+        .split("\n")
+        .filter((value) => value !== "");
+      if (paramsCopy.excFilters[filter].value.length === 0) {
+        delete paramsCopy.excFilters[filter];
+      }
+    }
+  }
   if (paramsCopy.dateBarrier?.use === false) {
     delete paramsCopy.dateBarrier;
   }
+  console.log(paramsCopy)
   return paramsCopy;
 }
 

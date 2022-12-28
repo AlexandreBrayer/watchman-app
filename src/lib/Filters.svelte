@@ -21,7 +21,8 @@
 </div>
 {#if enabled}
   <div class="w-4/5 flex-wrap flex m-auto justify-center">
-    <div class="w-1/2">
+    <div class="w-1/3">
+      filtres inclusifs
       <div class=" w-full flex justify-start items-center">
         <span class="text-center mr-2">Nom</span>
         <textarea class="" bind:value={$explorerParams.filters.name.value} />
@@ -63,7 +64,50 @@
         />
       </div>
     </div>
-    <div class="w-1/2">
+    <div class="w-1/3">
+      filtres excusifs
+      <div class=" w-full flex justify-start items-center">
+        <span class="text-center mr-2">Nom</span>
+        <textarea class="" bind:value={$explorerParams.excFilters.name.value} />
+        <span class="mx-2">Strict</span>
+        <input
+          class="z-10"
+          bind:checked={$explorerParams.excFilters.name.strict}
+          type="checkbox"
+        />
+      </div>
+      <div class="py-1 w-full flex justify-start items-center">
+        <span class="text-center mr-2">Ref.</span>
+        <textarea class="" bind:value={$explorerParams.excFilters.ref.value} />
+        <span class="mx-2">Strict</span>
+        <input
+          class="z-10"
+          bind:checked={$explorerParams.excFilters.ref.strict}
+          type="checkbox"
+        />
+      </div>
+      <div class="py-1 w-full flex justify-start items-center">
+        <span class="text-center mr-2">Marque</span>
+        <textarea class="" bind:value={$explorerParams.excFilters.brand.value} />
+        <span class="mx-2">Strict</span>
+        <input
+          class="z-10"
+          bind:checked={$explorerParams.excFilters.brand.strict}
+          type="checkbox"
+        />
+      </div>
+      <div class="py-1 w-full flex justify-start items-center">
+        <span class="text-center mr-2">Url</span>
+        <textarea class="" bind:value={$explorerParams.excFilters.url.value} />
+        <span class="mx-2">Strict</span>
+        <input
+          class="z-10"
+          bind:checked={$explorerParams.excFilters.url.strict}
+          type="checkbox"
+        />
+      </div>
+    </div>
+    <div class="w-1/3">
       <div class=" w-full flex flex-col justify-end items-end">
         <div>
           <input

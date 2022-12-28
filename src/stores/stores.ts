@@ -19,6 +19,24 @@ export const explorerParams = writable({
           strict: false,
         },
       },
+      excFilters: {
+        name: {
+          value: "",
+          strict: false,
+        },
+        ref: {
+          value: "",
+          strict: false,
+        },
+        brand: {
+          value: "",
+          strict: false,
+        },
+        url: {
+          value: "",
+          strict: false,
+        },
+      },
     sortBy: {
         createdAt: "-1"
     },

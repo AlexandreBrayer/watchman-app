@@ -6,7 +6,7 @@
   import Icon from "@iconify/svelte";
   import { explorerParams, productCount, totalPages } from "../stores/stores";
   import Filters from "../lib/Filters.svelte";
-  import Pagination from "../lib/Pagination.svelte";
+  import Pagination from "../lib/ExplorerPagination.svelte";
   import ExportModal from "../lib/ExportModal.svelte";
   moment.locale("fr");
 

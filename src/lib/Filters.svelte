@@ -24,11 +24,7 @@
     <div class="w-1/2">
       <div class=" w-full flex justify-start items-center">
         <span class="text-center mr-2">Nom</span>
-        <textarea
-          class=""
-          type="text"
-          bind:value={$explorerParams.filters.name.value}
-        />
+        <textarea class="" bind:value={$explorerParams.filters.name.value} />
         <span class="mx-2">Strict</span>
         <input
           class="z-10"
@@ -38,11 +34,7 @@
       </div>
       <div class="py-1 w-full flex justify-start items-center">
         <span class="text-center mr-2">Ref.</span>
-        <textarea
-          class=""
-          type="text"
-          bind:value={$explorerParams.filters.ref.value}
-        />
+        <textarea class="" bind:value={$explorerParams.filters.ref.value} />
         <span class="mx-2">Strict</span>
         <input
           class="z-10"
@@ -52,11 +44,7 @@
       </div>
       <div class="py-1 w-full flex justify-start items-center">
         <span class="text-center mr-2">Marque</span>
-        <textarea
-          class=""
-          type="text"
-          bind:value={$explorerParams.filters.brand.value}
-        />
+        <textarea class="" bind:value={$explorerParams.filters.brand.value} />
         <span class="mx-2">Strict</span>
         <input
           class="z-10"
@@ -66,11 +54,7 @@
       </div>
       <div class="py-1 w-full flex justify-start items-center">
         <span class="text-center mr-2">Url</span>
-        <textarea
-          class=""
-          type="text"
-          bind:value={$explorerParams.filters.url.value}
-        />
+        <textarea class="" bind:value={$explorerParams.filters.url.value} />
         <span class="mx-2">Strict</span>
         <input
           class="z-10"
@@ -103,10 +87,16 @@
             {$explorerParams.dateBarrier.after ? "Apres" : "Avant"}
           </Toggle>
         {/if}
-        <ResetFilters on:filter/>
+        <ResetFilters on:filter />
       </div>
     </div>
-    <Button color="purple" on:click={() => dispatch("filter")}>
+    <Button
+      color="purple"
+      on:click={() => {
+        $explorerParams.page = 1;
+        dispatch("filter");
+      }}
+    >
       Rechercher <Icon class="ml-1" icon={"mdi:magnify"} />
     </Button>
   </div>

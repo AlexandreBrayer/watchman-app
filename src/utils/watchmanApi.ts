@@ -3,7 +3,6 @@ type fluxExecutionBody = {
 };
 
 function sanitizeParams(params: Object) {
-  console.log(params)
   const paramsCopy = JSON.parse(JSON.stringify(params));
   for (const filter in paramsCopy.filters) {
     if (paramsCopy.filters[filter].value === "") {

@@ -30,3 +30,6 @@ export const explorerParams = writable({
     page: 1,
     limit: 20,
 });
+
+export const productCount = writable(0);
+export const totalPages = writable(0);

@@ -4,19 +4,21 @@
   import { productsExplorer } from "../utils/watchmanApi";
   import moment from "moment";
   import Icon from "@iconify/svelte";
-  import { explorerParams } from "../stores/stores";
+  import { explorerParams, productCount, totalPages } from "../stores/stores";
   import Filters from "../lib/Filters.svelte";
   import Pagination from "../lib/Pagination.svelte";
   import ExportModal from "../lib/ExportModal.svelte";
   moment.locale("fr");
 
-  async function getProducts(): Promise<[Product]> {
+  async function getProducts(): Promise<ProductsPayload> {
     if ($explorerParams.page < 1) {
       $explorerParams.page = 1;
       return promise;
     }
     try {
-      const result: [Product] = await productsExplorer($explorerParams);
+      const result: ProductsPayload = await productsExplorer($explorerParams);
+      $productCount = result.count;
+      $totalPages = Math.ceil(result.count / $explorerParams.limit);
       return result;
     } catch (e) {
       console.log(e);
@@ -33,7 +35,7 @@
     promise = getProducts();
   }
 
-  let promise: Promise<[Product]> = getProducts();
+  let promise: Promise<ProductsPayload> = getProducts();
 </script>
 
 <Filters
@@ -47,7 +49,7 @@
     <Spinner class="content-center" />
   </div>
 {:then products}
-  {#if products.length < 1}
+  {#if products.products.length < 1}
     <div class="m-6">Aucun produit</div>
     <Pagination on:next={nextPage} on:previous={previousPage} />
   {:else}
@@ -86,7 +88,7 @@
           <th class="py-2" />
         </thead>
         <tbody>
-          {#each products as product}
+          {#each products.products as product}
             <tr class="table-row">
               <td class="cell-wrap p-2 text-gray-900">
                 <abbr class="custom-abbr" title={product.name}>

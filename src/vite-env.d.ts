@@ -48,3 +48,9 @@ type ExplorerParams = {
   limit: number;
   filters: Filters;
 };
+
+type ProductsPayload = {
+  products: [Product];
+  count: number;
+  totalPages : number;
+}

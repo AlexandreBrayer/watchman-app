@@ -98,20 +98,6 @@ export async function generateCsv(fields: String[], filters: any) {
   return data;
 }
 
-export async function countProducts(params: Object = {}) {
-  const apiUrl = import.meta.env.VITE_API_URL;
-  const paramsCopy = sanitizeParams(params);
-  const result = await fetch(`${apiUrl}/product/count`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(paramsCopy),
-  });
-  const data = await result.json();
-  return data;
-}
-
 export async function receiveLastReportByFluxId(fluxId : string) {
   const apiUrl = import.meta.env.VITE_API_URL;
   const result = await fetch(`${apiUrl}/report/lastfluxreport/${fluxId}`, {

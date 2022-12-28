@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Modal, Button } from "flowbite-svelte";
-  import { generateCsv, countProducts } from "../utils/watchmanApi";
-  import { explorerParams } from "../stores/stores";
+  import { generateCsv } from "../utils/watchmanApi";
+  import { explorerParams, productCount } from "../stores/stores";
   import Icon from "@iconify/svelte";
   let open = false;
   let fields = [
@@ -18,7 +18,6 @@
     "createdAt",
   ];
   let selectedFields: String[] = ["name"];
-  let count: Promise<any> = countProducts($explorerParams);
   async function downloadCsv() {
     const data = await generateCsv(selectedFields, $explorerParams.filters);
     const encodedData = encodeURIComponent(data);
@@ -34,17 +33,12 @@
   <Button
     on:click={() => {
       open = true;
-      count = countProducts($explorerParams);
     }}
   >
     Exporter <Icon class="ml-1" icon={"mdi:file-export"} />
   </Button>
   <Modal title={"Exporter"} bind:open>
-    {#await count}
-      <p>Chargement...</p>
-    {:then count}
-      <p>Nombre de produits : {count.count}</p>
-    {/await}
+    <p>Nombre de produits : {$productCount}</p>
     <p>Champs :</p>
     {#each fields as field}
       <Button

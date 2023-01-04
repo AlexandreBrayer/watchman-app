@@ -6,7 +6,10 @@
   import Flux from "./pages/Flux.svelte";
   import Reports from "./pages/Reports.svelte";
   import Home from "./pages/Home.svelte";
+  import Register from "./pages/Register.svelte";
+  import Login from "./pages/Login.svelte";
   export let url = "";
+  import {user} from "./stores/stores";
 </script>
 
 <Router {url}>
@@ -25,6 +28,14 @@
       <NavLi active={true}>
         <Link to="/reports">Reports</Link>
       </NavLi>
+    {#if $user.token == ""}
+      <NavLi active={true}>
+        <Link to="/register">Register</Link>
+      </NavLi>
+      <NavLi active={true}>
+        <Link to="/login">Login</Link>
+      </NavLi>
+    {/if}
     </NavUl>
   </Navbar>
 
@@ -42,5 +53,11 @@
   </Route>
   <Route path="/reports">
     <Reports />
+  </Route>
+  <Route path="/register">
+    <Register />
+  </Route>
+  <Route path="/login">
+    <Login />
   </Route>
 </Router>

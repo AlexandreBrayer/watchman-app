@@ -1,6 +1,9 @@
 type fluxExecutionBody = {
   id: string;
 };
+import { user } from "../stores/stores";
+var userValue = null
+user.subscribe(value => userValue = value)
 
 function sanitizeParams(params: Object) {
   const paramsCopy = JSON.parse(JSON.stringify(params));
@@ -93,6 +96,7 @@ export async function receiveFluxes() {
     const result = await fetch(`${apiUrl}/flux`, {
       method: "GET",
       headers: {
+        "authorization": `Bearer ${userValue.token}`,
         "Content-Type": "application/json",
       },
     });

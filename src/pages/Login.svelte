@@ -24,6 +24,7 @@
         email: decoded.user.email,
         token: data.token,
       };
+      localStorage.setItem("user", JSON.stringify($user));
       toast.push("Logged in!", {
         theme: {
           "--toastColor": "mintcream",

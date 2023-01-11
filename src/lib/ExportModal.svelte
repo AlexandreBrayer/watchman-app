@@ -19,7 +19,7 @@
   ];
   let selectedFields: String[] = ["name"];
   async function downloadCsv() {
-    const data = await generateCsv(selectedFields, $explorerParams.filters);
+    const data = await generateCsv(selectedFields, $explorerParams);
     const encodedData = encodeURIComponent(data);
     const link = document.createElement("a");
     link.setAttribute("href", "data:text/csv;charset=utf-8," + encodedData);

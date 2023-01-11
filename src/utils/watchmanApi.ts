@@ -108,21 +108,22 @@ export async function receiveFluxes() {
   }
 }
 
-export async function generateCsv(fields: String[], filters: any) {
+export async function generateCsv(fields: String[], params: any) {
   const apiUrl = import.meta.env.VITE_API_URL;
   try {
+    const paramsCopy = sanitizeParams(params);
     const result = await fetch(`${apiUrl}/export`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ fields, filters }),
+      body: JSON.stringify({ fields: fields, filters: paramsCopy.filters }),
     });
     const data = await result.text();
     return data;
   } catch (error) {
     console.log(error);
-    return { error: error };
+    return JSON.stringify({ error: error });
   }
 }
 

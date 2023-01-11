@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { SvelteToast, toast } from "@zerodevx/svelte-toast";
   import {
     Table,
     TableBody,
@@ -40,7 +41,24 @@
             <Button
               on:click={async () => {
                 try {
-                  await executeFlux({ id: flux._id });
+                  const response = await executeFlux({ id: flux._id });
+                  if (response?.message === "Flux Spawned") {
+                    toast.push("Flux executed", {
+                      theme: {
+                        "--toastColor": "mintcream",
+                        "--toastBackground": "rgba(72,187,120,0.9)",
+                        "--toastBarBackground": "#2F855A",
+                      },
+                    });
+                  } else {
+                    toast.push("Error!", {
+                      theme: {
+                        "--toastColor": "mintcream",
+                        "--toastBackground": "rgba(255, 99, 71, 0.9)",
+                        "--toastBarBackground": "#e53e3e",
+                      },
+                    });
+                  }
                 } catch (e) {
                   console.log(e);
                 }
@@ -56,3 +74,4 @@
     </TableBody>
   </Table>
 {/await}
+<SvelteToast />

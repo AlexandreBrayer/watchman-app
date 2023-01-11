@@ -112,7 +112,6 @@
   type === "bottts" ? (options = { ...options, ...botttsOptions }) : null;
   type === "jdenticon" ? (options = { ...options, ...jdenticonOptions }) : null;
   type === "gridy" ? (options = { ...options, ...gridyOptions }) : null;
-  console.log(options);
   // @ts-ignore
   let avatars = new Avatars(getPackageForSprite(type), options);
   let svg = avatars.create(seed);

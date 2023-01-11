@@ -8,11 +8,13 @@
   import Home from "./pages/Home.svelte";
   import Register from "./pages/Register.svelte";
   import Login from "./pages/Login.svelte";
-  export let url = "";
   import { user } from "./stores/stores";
   import { onMount } from "svelte";
   import jwt_decode from "jwt-decode";
   import ProfileCard from "./lib/ProfileCard.svelte";
+
+  export let url = "";
+  
   type User = {
     _id: number;
     username: string;
@@ -27,7 +29,6 @@
         exp: number;
       } = jwt_decode(JSON.parse(myself).token);
       if (decoded.exp < Date.now() / 1000 - 60) {
-        console.log("token expired");
         localStorage.removeItem("user");
       } else {
         $user = {

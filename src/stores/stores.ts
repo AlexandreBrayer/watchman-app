@@ -18,6 +18,10 @@ export const explorerParams = writable({
       value: "",
       strict: false,
     },
+    from: {
+      value: "",
+      strict: true,
+    }
   },
   excFilters: {
     name: {

@@ -2,8 +2,8 @@ type fluxExecutionBody = {
   id: string;
 };
 import { user } from "../stores/stores";
-var userValue = null
-user.subscribe(value => userValue = value)
+var userValue = null;
+user.subscribe((value) => (userValue = value));
 
 function sanitizeParams(params: Object) {
   const paramsCopy = JSON.parse(JSON.stringify(params));
@@ -96,7 +96,7 @@ export async function receiveFluxes() {
     const result = await fetch(`${apiUrl}/flux`, {
       method: "GET",
       headers: {
-        "authorization": `Bearer ${userValue.token}`,
+        authorization: `Bearer ${userValue.token}`,
         "Content-Type": "application/json",
       },
     });
@@ -192,6 +192,23 @@ export async function login(username: string, password: string) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ username, password }),
+    });
+    const data = await result.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+    return { error: error };
+  }
+}
+
+export async function receiveProcesses() {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  try {
+    const result = await fetch(`${apiUrl}/process`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
     const data = await result.json();
     return data;

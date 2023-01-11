@@ -1,13 +1,15 @@
 <script lang="ts">
-  import { Button, Toggle } from "flowbite-svelte";
+  import { Button, Spinner, Toggle } from "flowbite-svelte";
   import { createEventDispatcher } from "svelte";
   import { explorerParams } from "../stores/stores";
   import ResetFilters from "./ResetFilters.svelte";
   import Icon from "@iconify/svelte";
+  import { receiveProcesses } from "../utils/watchmanApi";
 
   const dispatch = createEventDispatcher();
-
+  let selected =""
   let enabled = false;
+  let promise = receiveProcesses();
 </script>
 
 <div class="w-full mb-1 flex justify-center">
@@ -88,7 +90,10 @@
       </div>
       <div class="py-1 w-full flex justify-start items-center">
         <span class="text-center mr-2">Marque</span>
-        <textarea class="" bind:value={$explorerParams.excFilters.brand.value} />
+        <textarea
+          class=""
+          bind:value={$explorerParams.excFilters.brand.value}
+        />
         <span class="mx-2">Strict</span>
         <input
           class="z-10"
@@ -131,6 +136,19 @@
             {$explorerParams.dateBarrier.after ? "Apres" : "Avant"}
           </Toggle>
         {/if}
+        {#await promise}
+          <Spinner />
+        {:then processes}
+          <div class="my-2">
+            <label for="process">Process</label>
+            <select bind:value={selected} on:change={()=>$explorerParams.filters.from.value = selected} id="process">
+              <option value="">TOUS</option>
+              {#each processes as process}
+                <option value={process._id}>{process.name}</option>
+              {/each}
+            </select>
+          </div>
+        {/await}
         <ResetFilters on:filter />
       </div>
     </div>
